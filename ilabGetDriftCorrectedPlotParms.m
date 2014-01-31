@@ -195,8 +195,10 @@ driftCorrection = cat(1,driftCorrection,tailCorrection);
 
 
 % Apply the correction to the PP.data
-PP.data(:,1) = PP.data(:,1) + driftCorrection(:,1);
-PP.data(:,2) = PP.data(:,2) + driftCorrection(:,2);
+% WF20140131 -- changed from + to -   
+%   makes andrew's exampel data look better!
+PP.data(:,1) = PP.data(:,1) - driftCorrection(:,1);
+PP.data(:,2) = PP.data(:,2) - driftCorrection(:,2);
 
 end
 

@@ -138,7 +138,8 @@ subjectID=input('subjectID: ','s');
 
 %in lue of above try:
 % cd('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award/Behavioral Tasks/CMFT_EYE_SCRIPTS/')
-% load('example/andrew_drift_orig.mat');
+% andrew looked at the mouth the  whole time
+% load('example/andrew_drift_orig.mat'); 
 % addpath(genpath('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award Preparation/TASKS IN USE/FACES_ROI_INFO/Kirsten_Faces_ILab/ilab-3.6.8/' ) )
 % addpath(genpath(pwd))
 % [data, xdatlist,fixtab] = ilabExtractTrialData(AP, origPP,true);
