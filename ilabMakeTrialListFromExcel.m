@@ -13,6 +13,7 @@ function [ trials ] = ilabMakeTrialListFromExcel( path, sheetname )
 for i=2:size(raw,1)
     
     trials(i-1).XDAT = raw{i,1};
+    trials(i-1).img  = raw{i,2};
     trials(i-1).condition = raw{i,3};
     trials(i-1).occurance = raw{i,5};
     trials(i-1).trialtype = raw{i,4};
