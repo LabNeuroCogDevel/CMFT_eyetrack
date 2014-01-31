@@ -1,4 +1,11 @@
-function  fixationList = ilabMkFixationList(data, idx)
+function  fixationList = ilabMkFixationList(data, idx, AP)
+%
+% Montez's modification of build in
+% WF20140130: modified to take AP param. 
+%    b/c I'm lazy AND will error if paths are wrong
+%
+%
+
 % ILABMKFIXATIONLIST Calculates fixations
 %    ILAB includes two types of fixation calculations: velocity and
 %    dispersion based. In terms of the velocity algorithm, because eye
@@ -55,8 +62,8 @@ function  fixationList = ilabMkFixationList(data, idx)
 
 % Get some variables
 % -----------------------------------------------------------------------------
-AP = ilabGetAnalysisParms;
-acqIntvl = ilabGetAcqIntvl;
+%acqIntvl = ilabGetAcqIntvl;
+acqIntvl = 1/60*100;
 
 nTrials = size(idx,1);
 fixationList = [];

@@ -3,7 +3,10 @@ function [PP] = ilabGetDriftCorrectedPlotParms( AP, PP, fixationCoords, fixation
 % Generates a replacement for the PLOTPARMS PP.data structure that corrects
 % for linear drit in fixation.
 
-fixationIndex = [];
+%fixationIndex = [];
+fixationIndex = 1; 
+% added 20140130, to calcualte drift we need to know when we are in a fixation block
+% XDAT == 1 is fixation, see http://arnold.wpic.upmc.edu/dokuwiki/doku.php?id=studies:autism:cmtf
 driftCorrectionVectors = [];
 driftCorrection = [];
 minValidSamplePoints = minFixSamples;
@@ -18,6 +21,8 @@ minY = fixationCoords(2)-30;
 
 % Build a list of start and stop indices for the fixation trials and a list
 % of the fixation correction vectors at from each fixation trial
+
+% PP.index is rows:trials columns: start,stop,target
 for m=1:size(PP.index,1)
     
     % index of the onset of the fixation cue

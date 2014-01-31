@@ -1,4 +1,4 @@
-function [results] = ilabExtractTrialData(AP,PP,applyDriftCorrect)
+function [results,XDATList, fixationTable ] = ilabExtractTrialData(AP,PP,applyDriftCorrect)
 
 global subjectID
 
@@ -10,9 +10,9 @@ end
 % fixation cross is offset by 10 pixels vertically (why? who the fuck knows
 % and it's too late to fix it.)
 fixationCoords =                [320,230];
-fixationXDAT =                  3;
+fixationXDAT =                  1;
 minFixationSamples =            20;
-msPerSample =                   ilabGetAcqIntvl;
+msPerSample =                   1/60*100; %ilabGetAcqIntvl;
 
 % INITIALIZE THE RESULTS STRUCTURE
 results.roi = [];
@@ -25,11 +25,13 @@ roiData = [];
 fixData = {};
 
 % BUILD LIST OF TRIAL ROIS
-XDATList = ilabMakeTrialListFromExcel('B:\bea_res\Personal\Andrew\Autism\Experiments & Data\K Award Preparation\TASKS IN USE\FACES_ROI_INFO\ROI_Final.xlsx','ROICoords');
+%XDATList = ilabMakeTrialListFromExcel('B:\bea_res\Personal\Andrew\Autism\Experiments & Data\K Award Preparation\TASKS IN USE\FACES_ROI_INFO\ROI_Final.xlsx','ROICoords');
+scriptdir=fileparts(which('ilabExtractTrialData'));
+ROIFile = fullfile(scriptdir,'ROI','ROI_Final.xls');
+XDATList = ilabMakeTrialListFromExcel(ROIFile,'ROICoords');
 
 % BUILD ROI COLLECTIONS
 %ROIList = ilabMakeROIsFromExcelFile('B:\bea_res\Personal\Andrew\Autism\Experiments & Data\K Award Preparation\TASKS IN USE\FACES_ROI_INFO\ROIs_photoshop.xls','ROIIDS_coordinates');
-ROIList='';
 %ROIList = ilabMakeROIsFromExcelFile('B:\bea_res\Personal\Andrew\Autism\Experiments & Data\K Award Preparation\TASKS IN USE\SUBI_ROI_INFO\SUBI_ROI_INFO.xlsx','SUBI_Seed_1_ROI_CT_INFO');
 % UBI_Seed_1_ROI_CT_INFO ] [  SUBI_Seed_2_ROI_CT_INFO # for each seed/ user input?
 
@@ -40,7 +42,8 @@ end
 
 % EXTRACT THE FIXATIONS FROM THE CORRECTED PLOT PARMS
 % (THIS REQIRES KIRSTENS CUSTOM ANALYSISPARMS)
-fixationTable = ilabMkFixationList(PP.data,PP.index);
+fixationTable = ilabMkFixationList(PP.data,PP.index,AP); 
+%AP argumented added in modified version, will error if path is wrong
 
 % add condition and obseved repeats to fixation table
 condition=1;

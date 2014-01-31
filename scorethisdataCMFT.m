@@ -37,7 +37,7 @@
 %%
 
 
-global subjectID
+global subjectID ILAB
 subjectID=input('subjectID: ','s');
 
 
@@ -120,8 +120,28 @@ subjectID=input('subjectID: ','s');
 %    global AP origPP driftPP data
     AP = ilabGetAnalysisParms;
     origPP = ilabGetPlotParms;
-    driftPP = ilabGetDriftCorrectedPlotParms(AP, origPP, [320,230], 3, 20);
-    data = ilabExtractTrialData(AP,driftPP,true);
+    
+    
+    %320,230 is fixation center
+    %driftPP = ilabGetDriftCorrectedPlotParms(AP, origPP, [320,230], 3, 20);
+    % GetDriftCorrected is called from withint Extract function
+    % so we ignore dritfPP
+    
+    [data,xdatlist,fixtab] = ilabExtractTrialData(AP,origPP,true);
+    [data_nodrift,~,fixtab_nodrift] = ilabExtractTrialData(AP,origPP,false);
     % WF 20140130: changed to drift correction == TRUE, now save output
-    save([subjectID '_drift.mat'],'AP','origPP','driftPP','data')
+    matfile=[subjectID '_drift.mat'];
+    save(matfile,'subjectID','AP','origPP','xdatlist','fixtab','data','fixtab_nodrift','data_nodrift','ILAB')
 %end
+  
+   plotFixations(matfile);
+
+%in lue of above try:
+% cd('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award/Behavioral Tasks/CMFT_EYE_SCRIPTS/')
+% load('example/andrew_drift_orig.mat');
+% addpath(genpath('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award Preparation/TASKS IN USE/FACES_ROI_INFO/Kirsten_Faces_ILab/ilab-3.6.8/' ) )
+% addpath(genpath(pwd))
+% [data, xdatlist,fixtab] = ilabExtractTrialData(AP, origPP,true);
+% [data_nodrift,~,fixtab_nodrift] = ilabExtractTrialData(AP,origPP,false);
+% 
+
