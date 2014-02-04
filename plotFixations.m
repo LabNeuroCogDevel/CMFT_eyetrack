@@ -33,6 +33,7 @@ function plotFixations( matfile )
     rcolor={'m','g','y','b'};
     p={'x','y','w','h'};
     allrects=zeros(length(xdatlist),6,length(r),4);
+    nsubplots=2;
 
     % we have 3 for loops set up to extract the roi rectangles from 
     %   xdatlist -- the xls sheet of face region rectangles
@@ -44,15 +45,27 @@ function plotFixations( matfile )
         % draw image
         imagefile=fullfile( fileparts(which('plotFixations')), 'Screenshots', xdatlist(i).img );
         if(exist(imagefile,'file')); 
-            imagesc(imresize( imread(imagefile),[480 640] ) );
+            subplot(1,2,1)
+            imagesc(imresize( imread(imagefile) ,[480 640] ) );
+            
+        
+            subplot(1,2,2)
+            imagesc(imresize( flipdim(imread(imagefile),1) ,[480 640] ) );
+            set(gca,'YDir','normal')
+            
+            
         else
             close
             warning(['no screenshot: ' imagefile '\n'])
             figure
         end;
-        axis equal;
-        axis([0 640 0 460]) %  fix is center: [320,230] 
-        hold on;
+        
+        for sn=1:nsubplots
+            subplot(1,2,sn)
+            axis equal;
+            axis([0 640 0 460]) %  fix is center: [320,230] 
+            hold on;
+        end
         
 
         %% draw all the rois
@@ -64,9 +77,11 @@ function plotFixations( matfile )
                 rect=reshape(allrects(i,f,ri,:),[1 4]);
                 % skip if there are NaNs
                 if(any(isnan(rect))); continue; end
-
-                rectangle('Position',rect,...
-                          'Edgecolor',rcolor{ri});
+                for sn=1:nsubplots 
+                  subplot(1,2,sn)
+                  rectangle('Position',rect,...
+                            'Edgecolor',rcolor{ri});
+                end
             end
         end
 
@@ -112,13 +127,15 @@ function plotFixations( matfile )
         fprintf('scored fixation          .... ')
         data.fix(calcRoiFixIdx,:)
 
+       for sn=1:nsubplots 
+        subplot(1,2,sn)
         % plot the drift correct fixation points
         scatter(fixtab(fixidxs,2),fixtab(fixidxs,3),fixtab(fixidxs,7),'fill','b')
         % plot the actual eye location
         plot(eyedata(:,1),eyedata(:,2),'c');
         % plot actual fixation
         scatter(fixtab_nodrift(fixidxs_nodrift,2),fixtab_nodrift(fixidxs_nodrift,3),fixtab_nodrift(fixidxs_nodrift,7),'fill','c')
-
+       end
         
         % plot bar chart of time in each ROI
         % from drift corrected data.roi -- i xdatCode trialType condition ROInum times.face times.eyes times.nose times.mouth
