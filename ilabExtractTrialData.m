@@ -1,4 +1,4 @@
-function [results,XDATList, fixationTable ] = ilabExtractTrialData(AP,PP,applyDriftCorrect)
+function [results,XDATList, fixationTable, driftvector ] = ilabExtractTrialData(AP,PP,applyDriftCorrect)
 
 global subjectID
 
@@ -37,7 +37,9 @@ XDATList = ilabMakeTrialListFromExcel(ROIFile,'ROICoords');
 
 % If the user wants to run the analysis on the drift corrected time courses
 if applyDriftCorrect
-    PP = ilabGetDriftCorrectedPlotParms(AP, PP, fixationCoords, fixationXDAT, minFixationSamples);
+    [PP, driftvector ] = ilabGetDriftCorrectedPlotParms(AP, PP, fixationCoords, fixationXDAT, minFixationSamples);
+else
+    driftvector = -1;
 end
 
 % EXTRACT THE FIXATIONS FROM THE CORRECTED PLOT PARMS

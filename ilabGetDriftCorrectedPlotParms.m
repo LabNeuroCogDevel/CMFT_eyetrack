@@ -1,4 +1,4 @@
-function [PP] = ilabGetDriftCorrectedPlotParms( AP, PP, fixationCoords, fixationXDAT, minFixSamples  )
+function [PP, driftCorrection] = ilabGetDriftCorrectedPlotParms( AP, PP, fixationCoords, fixationXDAT, minFixSamples  )
 % ILABGETDRIFTCORRECTEDPLOTPARMS
 % Generates a replacement for the PLOTPARMS PP.data structure that corrects
 % for linear drit in fixation.

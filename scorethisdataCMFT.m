@@ -127,14 +127,26 @@ subjectID=input('subjectID: ','s');
     % GetDriftCorrected is called from withint Extract function
     % so we ignore dritfPP
     
-    [data,xdatlist,fixtab] = ilabExtractTrialData(AP,origPP,true);
-    [data_nodrift,~,fixtab_nodrift] = ilabExtractTrialData(AP,origPP,false);
+    [data,xdatlist,fixtab, driftvector] = ilabExtractTrialData(AP,origPP,true);
+    [data_nodrift,~,fixtab_nodrift,~] = ilabExtractTrialData(AP,origPP,false);
     % WF 20140130: changed to drift correction == TRUE, now save output
     matfile=[subjectID '_drift.mat'];
-    save(matfile,'subjectID','AP','origPP','xdatlist','fixtab','data','fixtab_nodrift','data_nodrift','ILAB')
+    save(matfile,'subjectID','AP','origPP','xdatlist','fixtab','data','fixtab_nodrift','data_nodrift','driftvector','ILAB')
 %end
   
+
+   %% show counts
+   [a,b]=unique(sort(data.fix(:,7)));
+   s =[ b(2:end); length(data.fix)];
+   for i=1:4; fprintf('% 5s % 5i\n',a{i},s(i) ), end
+   
+   %% show fix
+   fprintf('drift mean: % 3.3f % 3.3f\ndrift  std: % 3.3f % 3.3f\n',mean(driftvector),std(driftvector));
+   
    plotFixations(matfile);
+   
+   
+   
 
 %in lue of above try:
 % cd('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award/Behavioral Tasks/CMFT_EYE_SCRIPTS/')
