@@ -1,4 +1,5 @@
-function plotFixations( matfile )
+function plotFixations( matfile,varargin )
+
 % plotFixations plots each scored trial of CMTF 
 %  faces are plotted as blocks given by an xls file
 %  actual eye position data is plotted 
@@ -35,9 +36,15 @@ function plotFixations( matfile )
     allrects=zeros(length(xdatlist),6,length(r),4);
     nsubplots=2;
 
+    
+    if(length(varargin)<1)
+        triallist=1:length(xdatlist); %for each of the 92 types
+    else
+        triallist=varargin{1};
+    end
     % we have 3 for loops set up to extract the roi rectangles from 
     %   xdatlist -- the xls sheet of face region rectangles
-    for i = 1:length(xdatlist); %for each of the 92 types
+    for i = triallist
         %% setup figure
         %fig=figure;
         hold off;
