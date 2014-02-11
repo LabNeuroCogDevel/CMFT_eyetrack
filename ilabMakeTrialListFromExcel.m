@@ -10,7 +10,7 @@ function [ trials ] = ilabMakeTrialListFromExcel( path, sheetname )
 [num txt, raw] = xlsread(path,sheetname);
 
 
-for i=2:size(raw,1)
+for i=2:size(raw,1) % each trial
     
     trials(i-1).XDAT = raw{i,1};
     trials(i-1).img  = raw{i,2};
@@ -18,27 +18,64 @@ for i=2:size(raw,1)
     trials(i-1).occurance = raw{i,5};
     trials(i-1).trialtype = raw{i,4};
     
-    for j=0:5
-        
-        trials(i-1).(['x' num2str(j+1)]).face = raw{i,j*16+6};
-        trials(i-1).(['y' num2str(j+1)]).face = raw{i,j*16+7};
-        trials(i-1).(['w' num2str(j+1)]).face = raw{i,j*16+8};
-        trials(i-1).(['h' num2str(j+1)]).face = raw{i,j*16+9};
-        
-        trials(i-1).(['x' num2str(j+1)]).eyes = raw{i,j*16+10};
-        trials(i-1).(['y' num2str(j+1)]).eyes = raw{i,j*16+11};
-        trials(i-1).(['w' num2str(j+1)]).eyes = raw{i,j*16+12};
-        trials(i-1).(['h' num2str(j+1)]).eyes = raw{i,j*16+13};
-        
-        trials(i-1).(['x' num2str(j+1)]).nose = raw{i,j*16+14};
-        trials(i-1).(['y' num2str(j+1)]).nose = raw{i,j*16+15};
-        trials(i-1).(['w' num2str(j+1)]).nose = raw{i,j*16+16};
-        trials(i-1).(['h' num2str(j+1)]).nose = raw{i,j*16+17};
-        
-        trials(i-1).(['x' num2str(j+1)]).mouth = raw{i,j*16+18};
-        trials(i-1).(['y' num2str(j+1)]).mouth = raw{i,j*16+19};
-        trials(i-1).(['w' num2str(j+1)]).mouth = raw{i,j*16+20};
-        trials(i-1).(['h' num2str(j+1)]).mouth = raw{i,j*16+21};
+    for j=0:5 % 6 possible people on the screen
+        xlsidx=6; % roi positions start 6 columns into the file
+        for roi={'face','eyes','nose','mouth'}
+            for pos={'x','y','w','h'}
+                p=raw{i,j*16+xlsidx}; % 16 is 4 rois * 4 postions
+
+                %%%%
+                % some ROIs were annotated from screenshots taken at
+                %  1024x768 (?) -- convert to match actual faces
+                %  another set were taken at 
+                % finally presentaiton is 1140 x 900, asl+ilab  eye pos is 640x480
+                
+                %if(trials(i-1).condition > 1) % condition is not recoreded correctly?
+                if((i-1)<38) % everything before 38 came from one set of screenshots (codtion 1)
+                             % everything after was annotated with another
+                    origxscale=1152;
+                    origyscale=864;
+                    fudge=8;
+                else
+                    origxscale=1024;
+                    origyscale=768;
+                    fudge=33;
+                end
+                
+                switch pos{1}
+                    case 'x'
+                        p=((1440/2)-(((640/2)-p)*(origxscale/640)))*(640/1440);
+                    case 'y'
+                        p=(((900/2)-(((480/2)-p)*(origyscale/460)))*(480/900))-fudge;
+                    case 'w'
+                        p=p.*(origxscale/1440);
+                    case 'h'
+                        p=p.*(origyscale/900);
+                end
+                
+                trials(i-1).([pos{1} num2str(j+1)]).(roi{1}) = p;
+                xlsidx=xlsidx+1;
+            end            
+        end
+%         trials(i-1).(['x' num2str(j+1)]).face = raw{i,j*16+6};
+%         trials(i-1).(['y' num2str(j+1)]).face = raw{i,j*16+7};
+%         trials(i-1).(['w' num2str(j+1)]).face = raw{i,j*16+8};
+%         trials(i-1).(['h' num2str(j+1)]).face = raw{i,j*16+9};
+%         
+%         trials(i-1).(['x' num2str(j+1)]).eyes = raw{i,j*16+10};
+%         trials(i-1).(['y' num2str(j+1)]).eyes = raw{i,j*16+11};
+%         trials(i-1).(['w' num2str(j+1)]).eyes = raw{i,j*16+12};
+%         trials(i-1).(['h' num2str(j+1)]).eyes = raw{i,j*16+13};
+%         
+%         trials(i-1).(['x' num2str(j+1)]).nose = raw{i,j*16+14};
+%         trials(i-1).(['y' num2str(j+1)]).nose = raw{i,j*16+15};
+%         trials(i-1).(['w' num2str(j+1)]).nose = raw{i,j*16+16};
+%         trials(i-1).(['h' num2str(j+1)]).nose = raw{i,j*16+17};
+%         
+%         trials(i-1).(['x' num2str(j+1)]).mouth = raw{i,j*16+18};
+%         trials(i-1).(['y' num2str(j+1)]).mouth = raw{i,j*16+19};
+%         trials(i-1).(['w' num2str(j+1)]).mouth = raw{i,j*16+20};
+%         trials(i-1).(['h' num2str(j+1)]).mouth = raw{i,j*16+21};
         
     end
     

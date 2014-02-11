@@ -12,7 +12,8 @@ function plotFixations( matfile,varargin )
     % fixtab is the fixation table, fixtab_nodrift is without drift correction
     % origPP has the eye position data
     % xdatlist is the xls ROI file as it was read when fixation scoring was run
-    %
+    %  ROIFile = fullfile(fileparts(which('ilabExtractTrialData')),'ROI','ROI_Final.xls');
+    %  xdatlist = ilabMakeTrialListFromExcel(ROIFile,'ROICoords');
     
     % FIXATION TABLE is  
     %     n,.. trail number (132 of them)
@@ -34,7 +35,7 @@ function plotFixations( matfile,varargin )
     rcolor={'m','g','y','b'};
     p={'x','y','w','h'};
     allrects=zeros(length(xdatlist),6,length(r),4);
-    nsubplots=2;
+    nsubplots=1; % set to 2 to see other orentations of ROI/images
 
     
     if(length(varargin)<1)
@@ -52,13 +53,14 @@ function plotFixations( matfile,varargin )
         % draw image
         imagefile=fullfile( fileparts(which('plotFixations')), 'Screenshots', xdatlist(i).img );
         if(exist(imagefile,'file')); 
-            subplot(1,2,1)
+            subplot(1,nsubplots,1)
             imagesc(imresize( imread(imagefile) ,[480 640] ) );
-            
-        
-            subplot(1,2,2)
-            imagesc(imresize( flipdim(imread(imagefile),1) ,[480 640] ) );
-            set(gca,'YDir','normal')
+
+            if(nsubplots>1)
+             subplot(1,2,2)
+             imagesc(imresize( flipdim(imread(imagefile),1) ,[480 640] ) );
+             set(gca,'YDir','normal')
+            end
             
             
         else
@@ -68,7 +70,7 @@ function plotFixations( matfile,varargin )
         end;
         
         for sn=1:nsubplots
-            subplot(1,2,sn)
+            subplot(1,nsubplots,sn)
             axis equal;
             axis([0 640 0 460]) %  fix is center: [320,230] 
             hold on;
@@ -85,9 +87,10 @@ function plotFixations( matfile,varargin )
                 % skip if there are NaNs
                 if(any(isnan(rect))); continue; end
                 for sn=1:nsubplots 
-                  subplot(1,2,sn)
+                  subplot(1,nsubplots,sn)
                   rectangle('Position',rect,...
                             'Edgecolor',rcolor{ri});
+                  hold on;
                 end
             end
         end
@@ -135,7 +138,7 @@ function plotFixations( matfile,varargin )
         data.fix(calcRoiFixIdx,:)
 
        for sn=1:nsubplots 
-        subplot(1,2,sn)
+        subplot(1,nsubplots,sn)
         % plot the drift correct fixation points
         scatter(fixtab(fixidxs,2),fixtab(fixidxs,3),fixtab(fixidxs,7),'fill','b')
         % plot the actual eye location
