@@ -1,5 +1,8 @@
 
 %% WF 20140210 -- rescore subjmat files
+%% add java librarys
+% d=dir('excel_template//poi_library'); for di=1:length(d); if(all(d(di).name((end-2)=='jar'))); javaaddpath(['excel_template/poi_library/' d(di).name ]), end; end
+
 %% to score everyone in subj_eyemats (puts rescored in 'rescored/'
 % a=dir('subj_eyemats'); for i=1:length(a);  
 %  if(length(a(i).name)>4 && all(a(i).name( (end-2):end ) == 'mat' )); 
