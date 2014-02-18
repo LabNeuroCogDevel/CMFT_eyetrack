@@ -390,7 +390,8 @@ missing = setdiff(fixationXdatOccurMax,expectedXdatOccurMax,'rows');
 if(~isempty(missing))
    errfile=fopen([subjectID '-DROPPED.csv'],'w');
    fprintf(errfile,'cond,xdat,numberXDATrepeatsSeen\n');
-   for i=1:length(missing)
+   %for i=1:length(missing)
+   for i=1:size(missing,1)
        cond=missing(i,1);xdat=missing(i,2);%max=missing(i,3);
 
        fixidx=  find(cell2mat(fixData(:,10))== xdat & cell2mat(fixData(:,8))== cond) ;

@@ -127,11 +127,24 @@ subjectID=input('subjectID: ','s');
     % GetDriftCorrected is called from withint Extract function
     % so we ignore dritfPP
     
+    % ilabExtracTrialData needs to be the modified version of ilab
+    %  and we want paths to be relative
+    % So, change to the folder where this script lives
+    olddir=pwd;
+    cd(fileparts(which('scorethisdataCMFT')))
+    
     [data,xdatlist,fixtab, driftvector] = ilabExtractTrialData(AP,origPP,true);
     [data_nodrift,~,fixtab_nodrift,~] = ilabExtractTrialData(AP,origPP,false);
     % WF 20140130: changed to drift correction == TRUE, now save output
-    matfile=[subjectID '_drift.mat'];
+    matfile=['subj_eyemats/' subjectID '_drift.mat'];
+    
     save(matfile,'subjectID','AP','origPP','xdatlist','fixtab','data','fixtab_nodrift','data_nodrift','driftvector','ILAB')
+    
+    writeToTemplate( data, [ subjectID '_drift' ], 'excel_template/Fixation&ROI_template.xlsx');  
+    writeToTemplate( data_nodrift, [ subjectID '_nodrift' ] , 'excel_template/Fixation&ROI_template.xlsx');  
+  
+    
+    cd(olddir)
 %end
   
 
@@ -143,7 +156,7 @@ subjectID=input('subjectID: ','s');
    %% show fix
    fprintf('drift mean: % 3.3f % 3.3f\ndrift  std: % 3.3f % 3.3f\n',mean(driftvector),std(driftvector));
    
-   plotFixations(matfile);
+   %plotFixations(matfile);
    
    
    

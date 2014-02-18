@@ -53,6 +53,18 @@ for i=2:size(raw,1) % each trial
                         p=p.*(origyscale/900);
                 end
                 
+                % but go back to what we had originally if
+                % these are the roi's jen editted
+                if ( (i-1)==37 || (i-1)==68 )
+                    if( any( pos{1} == 'wx' ) )
+                      p=raw{i,j*16+xlsidx} * 640/1440
+                    else %yh
+                      p=raw{i,j*16+xlsidx} * 480/900
+                    end
+                end
+                    
+                    
+                
                 trials(i-1).([pos{1} num2str(j+1)]).(roi{1}) = p;
                 xlsidx=xlsidx+1;
             end            
