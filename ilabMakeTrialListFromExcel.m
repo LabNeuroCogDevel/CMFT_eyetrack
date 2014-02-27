@@ -9,7 +9,7 @@ function [ trials ] = ilabMakeTrialListFromExcel( path, sheetname )
 
 [num txt, raw] = xlsread(path,sheetname);
 
-
+faceasmat=zeros(30,11);
 for i=2:size(raw,1) % each trial
     
     trials(i-1).XDAT = raw{i,1};
@@ -68,27 +68,54 @@ for i=2:size(raw,1) % each trial
                 trials(i-1).([pos{1} num2str(j+1)]).(roi{1}) = p;
                 xlsidx=xlsidx+1;
             end            
+
         end
-%         trials(i-1).(['x' num2str(j+1)]).face = raw{i,j*16+6};
-%         trials(i-1).(['y' num2str(j+1)]).face = raw{i,j*16+7};
-%         trials(i-1).(['w' num2str(j+1)]).face = raw{i,j*16+8};
-%         trials(i-1).(['h' num2str(j+1)]).face = raw{i,j*16+9};
-%         
-%         trials(i-1).(['x' num2str(j+1)]).eyes = raw{i,j*16+10};
-%         trials(i-1).(['y' num2str(j+1)]).eyes = raw{i,j*16+11};
-%         trials(i-1).(['w' num2str(j+1)]).eyes = raw{i,j*16+12};
-%         trials(i-1).(['h' num2str(j+1)]).eyes = raw{i,j*16+13};
-%         
-%         trials(i-1).(['x' num2str(j+1)]).nose = raw{i,j*16+14};
-%         trials(i-1).(['y' num2str(j+1)]).nose = raw{i,j*16+15};
-%         trials(i-1).(['w' num2str(j+1)]).nose = raw{i,j*16+16};
-%         trials(i-1).(['h' num2str(j+1)]).nose = raw{i,j*16+17};
-%         
-%         trials(i-1).(['x' num2str(j+1)]).mouth = raw{i,j*16+18};
-%         trials(i-1).(['y' num2str(j+1)]).mouth = raw{i,j*16+19};
-%         trials(i-1).(['w' num2str(j+1)]).mouth = raw{i,j*16+20};
-%         trials(i-1).(['h' num2str(j+1)]).mouth = raw{i,j*16+21};
-        
+
+        % still inside trial loop (i) and face loop (j)
+        % check that the rois have no gap
+        % -- print out the change so we can audit this
+        noseYshouldBe = ...
+          trials(i-1).(['y' num2str(j+1)]).eyes + ...
+          trials(i-1).(['h' num2str(j+1)]).eyes   - 1;
+
+        mouthYshouldBe = ...
+          trials(i-1).(['y' num2str(j+1)]).nose + ...
+          trials(i-1).(['h' num2str(j+1)]).nose   - 1;
+
+        if trials(i-1).(['y' num2str(j+1)]).nose  ~= noseYshouldBe
+          fprintf('nose not aligned with eye, y_n %f set to %f\n', ...
+            trials(i-1).(['y' num2str(j+1)]).nose, noseYshouldBe);
+
+          trials(i-1).(['y' num2str(j+1)]).nose = noseYshouldBe;
+        end
+
+        if trials(i-1).(['y' num2str(j+1)]).mouth ~= mouthYshouldBe
+          fprintf('mouth not aligned with nose, y_m %f set to %f\n', ...
+            trials(i-1).(['y' num2str(j+1)]).mouth, mouthYshouldBe);
+
+           trials(i-1).(['y' num2str(j+1)]).mouth = mouthYshouldBe;
+        end
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+        % lets write out what we are actually using, like
+        % trial,XDAT,trialtype(1/2), condition, occurance, face# (j),roitype(1=face...4=mouth), x, y, w, h 
+        facenum=0;
+        for face = {'face','eyes','nose','mouth'}
+           face=face{1};
+           facenum=facenum+1;
+           faceasmat(i,:) = [
+              i-1, trials(i-1).XDAT, trials(i-1).trialtype, ...
+              trials(i-1).condition, trials(i-1).occurance, ...
+              j, facenum, 
+              trials(i-1).(['x' num2str(j+1)]).(face), ...
+              trials(i-1).(['y' num2str(j+1)]).(face), ...
+              trials(i-1).(['w' num2str(j+1)]).(face), ...
+              trials(i-1).(['h' num2str(j+1)]).(face), ...
+          ];
+          fprintf('%03d\t',faceasmat(i,:));
+          fprintf('\n');
+        end
+
     end
     
     

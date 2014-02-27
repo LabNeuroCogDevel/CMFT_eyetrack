@@ -7,6 +7,8 @@ function plotFixations( matfile,varargin )
 %     fixation length
 %
 % function requires a mat files that has variables specified
+   %TODO: set fixxdat
+   fixxdat=2
 
     load(matfile)
     % fixtab is the fixation table, fixtab_nodrift is without drift correction
@@ -35,7 +37,7 @@ function plotFixations( matfile,varargin )
     rcolor={'m','g','y','b'};
     p={'x','y','w','h'};
     allrects=zeros(length(xdatlist),6,length(r),4);
-    nsubplots=1; % set to 2 to see other orentations of ROI/images
+    nsubplots=2; % set to 2 to see fixation plots too
 
     
     if(length(varargin)<1)
@@ -58,7 +60,8 @@ function plotFixations( matfile,varargin )
 
             if(nsubplots>1)
              subplot(1,2,2)
-             imagesc(imresize( flipdim(imread(imagefile),1) ,[480 640] ) );
+             % TODO: this should be the fixation screenshot
+             imagesc(imresize( imread('Screenshots/AA_Review_Image.jpg') ,[480 640] ) );
              set(gca,'YDir','normal')
             end
             
@@ -86,12 +89,10 @@ function plotFixations( matfile,varargin )
                 rect=reshape(allrects(i,f,ri,:),[1 4]);
                 % skip if there are NaNs
                 if(any(isnan(rect))); continue; end
-                for sn=1:nsubplots 
-                  subplot(1,nsubplots,sn)
-                  rectangle('Position',rect,...
-                            'Edgecolor',rcolor{ri});
-                  hold on;
-                end
+                subplot(1,nsubplots,1)
+                rectangle('Position',rect,...
+                          'Edgecolor',rcolor{ri});
+                hold on;
             end
         end
 
@@ -137,15 +138,18 @@ function plotFixations( matfile,varargin )
         fprintf('scored fixation          .... ')
         data.fix(calcRoiFixIdx,:)
 
-       for sn=1:nsubplots 
-        subplot(1,nsubplots,sn)
+        
+
+
+        %% plot where we see fixations during the trial
+
+        subplot(1,nsubplots,1)
         % plot the drift correct fixation points
         scatter(fixtab(fixidxs,2),fixtab(fixidxs,3),fixtab(fixidxs,7),'fill','b')
         % plot the actual eye location
         plot(eyedata(:,1),eyedata(:,2),'c');
         % plot actual fixation
         scatter(fixtab_nodrift(fixidxs_nodrift,2),fixtab_nodrift(fixidxs_nodrift,3),fixtab_nodrift(fixidxs_nodrift,7),'fill','c')
-       end
         
         % plot bar chart of time in each ROI
         % from drift corrected data.roi -- i xdatCode trialType condition ROInum times.face times.eyes times.nose times.mouth
@@ -171,6 +175,21 @@ function plotFixations( matfile,varargin )
 
         % mark dot and lines, color of regions (r)
         legend({'fix_{corrected}','data_{actual}','fix_{actual}', r{:} })
+
+        %% plot fixation bit of the trial and the calculated drift
+        if nsubplots >1
+          % find fixation indexes closet to this trial
+          % see 
+
+          % get the closest ilab fixation trial that is before this trial
+          ilabfixtrial = max( origPP.index(1:ilabtrial,3)==fixxdat .* 1:ilabtrial )
+          subplot(1,nsubplots,2)
+          if ilabfixtrial>0
+            fixdata  = origPP.data(origPP.index(ilabfixtrial,1):origPP.index(fixilabtrial,2),1:2); 
+            scatter(fixdata(:,1),fixdata(:,2),'fill','g')
+          end
+          %% TODO: plot drift correction vector
+        end 
 
         
         input('enter to go to next...','s')
