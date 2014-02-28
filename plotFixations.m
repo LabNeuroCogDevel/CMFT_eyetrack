@@ -7,9 +7,9 @@ function plotFixations( matfile,varargin )
 %     fixation length
 %
 % function requires a mat files that has variables specified
-   %TODO: set fixxdat
-   fixxdat=2
-
+    fixxdat=3;        % what is the xdat on fixation trials
+    center=[340,240]; % center of screen at 640x480
+    
     load(matfile)
     % fixtab is the fixation table, fixtab_nodrift is without drift correction
     % origPP has the eye position data
@@ -61,8 +61,8 @@ function plotFixations( matfile,varargin )
             if(nsubplots>1)
              subplot(1,2,2)
              % TODO: this should be the fixation screenshot
-             imagesc(imresize( imread('Screenshots/AA_Review_Image.jpg') ,[480 640] ) );
-             set(gca,'YDir','normal')
+             imagesc(imresize( imread('Screenshots/Fixation.png') ,[480 640] ) );
+             %set(gca,'YDir','normal')
             end
             
             
@@ -182,13 +182,28 @@ function plotFixations( matfile,varargin )
           % see 
 
           % get the closest ilab fixation trial that is before this trial
-          ilabfixtrial = max( origPP.index(1:ilabtrial,3)==fixxdat .* 1:ilabtrial )
+          ilabfixtrial = find(origPP.data(origPP.index(1:ilabtrial,3),3)==3,1,'last');
           subplot(1,nsubplots,2)
+          sptitle=['fixation @ ' num2str(ilabfixtrial)];
           if ilabfixtrial>0
-            fixdata  = origPP.data(origPP.index(ilabfixtrial,1):origPP.index(fixilabtrial,2),1:2); 
-            scatter(fixdata(:,1),fixdata(:,2),'fill','g')
+            % eye data
+            fixdata  = origPP.data(origPP.index(ilabfixtrial,1):origPP.index(ilabfixtrial,2),1:2); 
+            scatter(fixdata(:,1),fixdata(:,2),1,'g')
+            % drift correction vector
+            % should verify that from index start to stop, drift is the same
+            if(exist('driftvector','var'))
+                dxy= driftvector(origPP.index(ilabtrial,3),:);
+                x= [ center(1), center(1) - dxy(1) ];
+                y= [ center(2), center(2) - dxy(2) ];
+                h=line(x, y);
+                set(h,'LineWidth',7,'Color','r')
+                sptitle=[sptitle '(' num2str(dxy(1)) ',' num2str(dxy(2)) ];
+            else
+                fprintf(['no drift vector saved in' matfile '!\n'])
+            end
+            title(sptitle)
           end
-          %% TODO: plot drift correction vector
+          
         end 
 
         
