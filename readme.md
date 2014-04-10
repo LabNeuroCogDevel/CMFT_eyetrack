@@ -1,22 +1,26 @@
-Cambridge memory test for faces
+# Cambridge memory test for faces
 
-# 2014 04 10 
-## ROIs
+## 2014 04 10 
+### ROIs
  * `drawROI` pulls from `ROImatout.txt`
    * try e.g. `drawROI(1)` and adjusting ROImatout.txt 
 
-## Rescoring
+### Rescoring
 ```matlab
- % test for a single person
- rescorethisdataCMFT('will')
+ % add ilab to path
+ addpath(genpath('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award Preparation/TASKS IN USE/FACES_ROI_INFO/Kirsten_Faces_ILab/ilab-3.6.8'))
+ % rescore a single person (from output of jens scoring
+ rescorethisdataCMFT('subj_eyemats/will_drift.mat')
  % view
  plotFixations('rescored/will_drift.mat',1:2)
  % rescore everyone
  rescoreAll
 ```
 
-
-# Original
+### TODO
+ * condition 3 memory is included in condition 2 test
+ *
+## Original
 ```text
 ***************************** 
  Have moved scorethisdataCMFT and ilabMkFixationList.m from ilab directory into here!

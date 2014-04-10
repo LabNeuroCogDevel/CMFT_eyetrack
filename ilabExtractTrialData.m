@@ -119,6 +119,10 @@ for i=1:size(fixationTable,1)
                 for ROItype={'face','eyes','mouth','nose'}
                     ROItype=ROItype{1};
                     %ROInum, ROItype
+                    if isempty(ROI.(['x' num2str(ROInum)]))
+                        %fprintf('%d %d is empty\n',k,ROInum) 
+                        continue
+                    end
                     x=ROI.(['x' num2str(ROInum)]).(ROItype); 
                     y=ROI.(['y' num2str(ROInum)]).(ROItype); 
                     w=ROI.(['w' num2str(ROInum)]).(ROItype); 
@@ -266,6 +270,10 @@ repXDAT=zeros(1,163);
                 for ROInum=1:6
                     for ROItype={'face','eyes','mouth','nose'}
                         ROItype=ROItype{1};
+                        if isempty(ROI.(['x' num2str(ROInum)]))
+                         %fprintf('%d %d is empty\n',k,ROInum) 
+                         continue
+                        end
                         times.(ROItype)=0;
                         %ROInum, ROItype
                         x=ROI.(['x' num2str(ROInum)]).(ROItype);
