@@ -8,7 +8,7 @@ function plotFixations( matfile,varargin )
 %
 % function requires a mat files that has variables specified
     fixxdat=3;        % what is the xdat on fixation trials
-    center=[340,240]; % center of screen at 640x480
+    center=[320,230]; % center of screen at 640x480
     
     load(matfile)
     % fixtab is the fixation table, fixtab_nodrift is without drift correction
@@ -196,7 +196,7 @@ function plotFixations( matfile,varargin )
                 x= [ center(1), center(1) - dxy(1) ];
                 y= [ center(2), center(2) - dxy(2) ];
                 h=line(x, y);
-                set(h,'LineWidth',7,'Color','r')
+                set(h,'LineWidth',3,'Color','r')
                 sptitle=[sptitle '(' num2str(dxy(1)) ',' num2str(dxy(2)) ];
             else
                 fprintf(['no drift vector saved in' matfile '!\n'])

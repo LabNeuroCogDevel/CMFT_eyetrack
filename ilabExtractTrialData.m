@@ -27,8 +27,9 @@ fixData = {};
 % BUILD LIST OF TRIAL ROIS
 %XDATList = ilabMakeTrialListFromExcel('B:\bea_res\Personal\Andrew\Autism\Experiments & Data\K Award Preparation\TASKS IN USE\FACES_ROI_INFO\ROI_Final.xlsx','ROICoords');
 scriptdir=fileparts(which('ilabExtractTrialData'));
-ROIFile = fullfile(scriptdir,'ROI','ROI_Final.xls');
-XDATList = ilabMakeTrialListFromExcel(ROIFile,'ROICoords');
+%ROIFile = fullfile(scriptdir,'ROI','ROI_Final.xls');
+%XDATList = ilabMakeTrialListFromExcel(ROIFile,'ROICoords');
+XDATList  = readROItxt(fullfile(scriptdir,'ROImatout.txt'),fullfile(scriptdir,'ROI/imagelist.txt'));
 
 % BUILD ROI COLLECTIONS
 %ROIList = ilabMakeROIsFromExcelFile('B:\bea_res\Personal\Andrew\Autism\Experiments & Data\K Award Preparation\TASKS IN USE\FACES_ROI_INFO\ROIs_photoshop.xls','ROIIDS_coordinates');

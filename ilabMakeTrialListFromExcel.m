@@ -3,6 +3,14 @@ function [ trials ] = ilabMakeTrialListFromExcel( path, sheetname,varargin )
 % we dont want to do this every time
 if(~isempty(varargin))
     writeout=1;
+    roifid=fopen('ROImatout.txt','w');
+    % trial,XDAT,trialtype(1/2), condition, occurance, face# (j),roitype(1=face...4=mouth), x, y, w, h 
+    fprintf(roifid,'% 6s\t',char({'trial','XDAT','ttype  ',...
+                                  'cond', 'occur', 'face#',...
+                                  'roi#', 'x', 'y', 'w', 'h'})');
+    fprintf(roifid,'\n');
+
+
 else
     writeout=0;
 end
@@ -18,12 +26,9 @@ end
 
 faceasmat=zeros(30,11);
 
-roifid=fopen('ROImatout.txt','w');
-% trial,XDAT,trialtype(1/2), condition, occurance, face# (j),roitype(1=face...4=mouth), x, y, w, h 
-fprintf(roifid,'% 6s\t',char({'trial','XDAT','ttype  ',...
-                     'cond', 'occur', 'face#',...
-                      'roi#', 'x', 'y', 'w', 'h'})');
-fprintf(roifid,'\n');
+
+
+
 for i=2:size(raw,1) % each trial
     
     trials(i-1).XDAT = raw{i,1};
@@ -159,6 +164,8 @@ for i=2:size(raw,1) % each trial
     
 end
 
-fclose(roifid);
+if(writeout)
+  fclose(roifid);
+end
 
 end
