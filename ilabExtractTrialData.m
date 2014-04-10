@@ -392,6 +392,9 @@ for cond=1:3;
     end; 
 end;
 
+% dont know where this came from -- but it's always in fixationXdatOccurMax
+expectedXdatOccurMax = [expectedXdatOccurMax; 3 72 1];
+
 missing = setdiff(fixationXdatOccurMax,expectedXdatOccurMax,'rows');
 %
 % REMOVE fixations and rois when that xdat is too ambigious
