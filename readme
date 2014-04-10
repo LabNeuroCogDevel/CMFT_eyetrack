@@ -1,5 +1,23 @@
 Cambridge memory test for faces
 
+# 2014 04 10 
+## ROIs
+ * `drawROI` pulls from `ROImatout.txt`
+   * try e.g. `drawROI(1)` and adjusting ROImatout.txt 
+
+## Rescoring
+```matlab
+ % test for a single person
+ rescorethisdataCMFT('will')
+ % view
+ plotFixations('rescored/will_drift.mat',1:2)
+ % rescore everyone
+ rescoreAll
+```
+
+
+# Original
+```text
 ***************************** 
  Have moved scorethisdataCMFT and ilabMkFixationList.m from ilab directory into here!
    so order of add path is now important
@@ -94,3 +112,4 @@ CODE:
     %%% Score trials
     ilabExtractTrialData
          read from excel :(
+```
