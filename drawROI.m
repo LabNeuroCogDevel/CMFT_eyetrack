@@ -76,38 +76,40 @@ function drawROI(roinum)
     
     
     %% save new list
-    roifid=fopen('ROImatout.txt','w');
-    % trial,XDAT,trialtype(1/2), condition, occurance, face# (j),roitype(1=face...4=mouth), x, y, w, h 
-    fprintf(roifid,'% 6s\t',char({'trial','XDAT','ttype  ',...
-                                  'cond', 'occur', 'face#',...
-                                  'roi#', 'x', 'y', 'w', 'h'})');
-    fprintf(roifid,'\n');
-    
-    for i=1:length(rois)
-        for j=0:5 % 6 possible people on the screen 
+    for f={ [ 'ROImatout-' num2str(roinum) '.txt' ],'ROImatout.txt' }
+       roifid=fopen(f{1},'w');
+       % trial,XDAT,trialtype(1/2), condition, occurance, face# (j),roitype(1=face...4=mouth), x, y, w, h 
+       fprintf(roifid,'% 6s\t',char({'trial','XDAT','ttype  ',...
+                                     'cond', 'occur', 'face#',...
+                                     'roi#', 'x', 'y', 'w', 'h'})');
+       fprintf(roifid,'\n');
+       
+       for i=1:length(rois)
+           for j=0:5 % 6 possible people on the screen 
 
-            if isempty(rois(i).(['x' num2str(j+1)])); continue;  end
-            facenum=0;
-            for face = {'face','eyes','nose','mouth'}
-                  face=face{1};
-                  facenum=facenum+1;
+               if isempty(rois(i).(['x' num2str(j+1)])); continue;  end
+               facenum=0;
+               for face = {'face','eyes','nose','mouth'}
+                     face=face{1};
+                     facenum=facenum+1;
 
-                  fprintf(roifid,'%d\t', [ ...
-                      i, rois(i).XDAT, rois(i).trialtype, ...
-                      rois(i).condition, rois(i).occurance, ...
-                      j, facenum]);
-                  fprintf(roifid,'%03.01f\t',[...
-                      rois(i).(['x' num2str(j+1)]).(face), ...
-                      rois(i).(['y' num2str(j+1)]).(face), ...
-                      rois(i).(['w' num2str(j+1)]).(face), ...
-                      rois(i).(['h' num2str(j+1)]).(face), ...
-                    ]);
-                  fprintf(roifid,'\n');
-            end
-        end
+                     fprintf(roifid,'%d\t', [ ...
+                         i, rois(i).XDAT, rois(i).trialtype, ...
+                         rois(i).condition, rois(i).occurance, ...
+                         j, facenum]);
+                     fprintf(roifid,'%03.01f\t',[...
+                         rois(i).(['x' num2str(j+1)]).(face), ...
+                         rois(i).(['y' num2str(j+1)]).(face), ...
+                         rois(i).(['w' num2str(j+1)]).(face), ...
+                         rois(i).(['h' num2str(j+1)]).(face), ...
+                       ]);
+                     fprintf(roifid,'\n');
+               end
+           end
+       end
+       
+       fclose(roifid);
     end
-    
-    fclose(roifid);
     close(fig)
 
 end
