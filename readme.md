@@ -18,8 +18,34 @@
 ```
 
 ### TODO
- * condition 3 memory is included in condition 2 test
- *
+ * ~~condition 3 memory is included in condition 2 test~~ trial 63 condition changed to 3
+ 
+## Paradigm
+ Participants push a button to identify which face belongs to a previously memorized face. The paradigm has 3 variations (conditions) each with 2 phases (types): (1) memory and (2) recall.
+
+ See `ROImatout.txt`
+
+Cond | mem  | recall
+-----|------|-------
+1    | 6(x3)| 6(x3) 
+2    | 1    | 30
+3    | 1    | 24
+
+### Condition 1 
+There are 18 memorization + recall events
+
+1. *Memorization*: 3 slides are presented one at a time for 3 seconds each. Each slide shows the same face from a different angle.
+2. *Recall*:  a slide with 3 faces is presented. The participate is asked to push 1,2, or 3 to indicate which face was memorized. This happens 3 times.
+
+### Condition 2 and 3
+There are 30 recalls in condition 2 and 24 in condition 3.
+
+1. *Memorization*: one slide with 6 previously seen faces 
+2. *Recall*:  same as before but with **xx** repeats instead of 3.
+ 
+### Manipulations
+ Some recall faces are noisy.
+
 ## Original
 ```text
 ***************************** 
