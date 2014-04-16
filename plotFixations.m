@@ -82,6 +82,12 @@ function plotFixations( matfile,varargin )
 
         %% draw all the rois
         for f=1:6; % for each face
+            
+            % skip if there is no face here 
+            if isempty(xdatlist(i).([p{1} num2str(f)]) )
+               continue
+            end
+
             for ri=1:length(r); % for each region      
                 for pi=1:length(p) 
                     allrects(i,f,ri,pi)=xdatlist(i).([p{pi} num2str(f)]).(r{ri});
