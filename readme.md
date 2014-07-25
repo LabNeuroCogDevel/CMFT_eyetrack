@@ -8,7 +8,7 @@
 ### Rescoring
 ```matlab
  % add ilab to path
- addpath(genpath('/mnt/B/bea_res/Personal/Andrew/Autism/Experiments & Data/K Award Preparation/TASKS IN USE/FACES_ROI_INFO/Kirsten_Faces_ILab/ilab-3.6.8'))
+ addpath(genpath('/mnt/B/bea_res/Autism/Experiments & Data/K Award Preparation/TASKS IN USE/FACES_ROI_INFO/Kirsten_Faces_ILab/ilab-3.6.8'))
  % rescore a single person (from output of jens scoring
  rescorethisdataCMFT('subj_eyemats/will_drift.mat')
  % view
