@@ -39,6 +39,7 @@
 
 global subjectID ILAB
 subjectID=input('subjectID: ','s');
+year=input('year: ','s');
 
 
 %%%% Automate button pushing when we have a subject ID
@@ -136,12 +137,12 @@ subjectID=input('subjectID: ','s');
     [data,xdatlist,fixtab, driftvector] = ilabExtractTrialData(AP,origPP,true);
     [data_nodrift,~,fixtab_nodrift,~] = ilabExtractTrialData(AP,origPP,false);
     % WF 20140130: changed to drift correction == TRUE, now save output
-    matfile=['subj_eyemats/' subjectID '_drift.mat'];
+    matfile=['subj_eyemats_' year '/' subjectID '_drift.mat'];
     
     save(matfile,'subjectID','AP','origPP','xdatlist','fixtab','data','fixtab_nodrift','data_nodrift','driftvector','ILAB')
     
-    writeToTemplate( data, [ subjectID '_drift' ], 'excel_template/Fixation&ROI_template.xlsx');  
-    writeToTemplate( data_nodrift, [ subjectID '_nodrift' ] , 'excel_template/Fixation&ROI_template.xlsx');  
+    writeToTemplate( data, [ subjectID '_drift' ], 'excel_template/Fixation&ROI_template.xlsx', year);  
+    writeToTemplate( data_nodrift, [ subjectID '_nodrift' ] , 'excel_template/Fixation&ROI_template.xlsx',year);  
   
     
     cd(olddir)

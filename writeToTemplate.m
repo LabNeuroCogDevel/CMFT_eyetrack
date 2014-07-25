@@ -1,5 +1,5 @@
-function [ success ] = writeToTemplate( data, name, template )
-  newxlsx=[ 'rescored/' name '.xlsx'];
+function [ success ] = writeToTemplate( data, name, template, year )
+  newxlsx=[ 'xls_' year '/' name '.xlsx'];
   fprintf('%s -- building excel\n',newxlsx); 
   copyfile(template,newxlsx )
   success(1) = xlwrite(newxlsx,data.roi,'results.roi','A5');

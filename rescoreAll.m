@@ -5,6 +5,8 @@ function rescoreAll(varargin)
     else
         filelist=varargin{1};
     end
+
+    year = input('year:','s');
     
     %% rescore everyone and write an excel sheet
     %% add java librarys
@@ -28,10 +30,10 @@ function rescoreAll(varargin)
       )
       fprintf('starting: %s\n',filelist(i).name); 
       % use saved origPP to rescore
-      scored = rescorethisdataCMFT([ 'subj_eyemats/' filelist(i).name]);
+      scored = rescorethisdataCMFT([ 'subj_eyemats_' year '/' filelist(i).name]);
       % add to excel
-      writeToTemplate( scored.data, filelist(i).name(1:(end-4) ), 'excel_template/Fixation&ROI_template.xlsx');  
-      writeToTemplate( scored.data_nodrift, [ filelist(i).name(1:(end-4)), 'nodrift' ] , 'excel_template/Fixation&ROI_template.xlsx');  
+      writeToTemplate( scored.data, filelist(i).name(1:(end-4) ), 'excel_template/Fixation&ROI_template.xlsx',year);  
+      writeToTemplate( scored.data_nodrift, [ filelist(i).name(1:(end-4)), 'nodrift' ] , 'excel_template/Fixation&ROI_template.xlsx',year);  
 
      end;
     end

@@ -5,9 +5,13 @@
 function sub = rescorethisdataCMFT(varargin)
     if(length(varargin)==1)
         matfile=varargin{1};
+        year=input('year:','s');
+    elseif(length(varargin)==1)
+        matfile=varargin{1};
+        year=varargin{2};
     else 
         subjectID=input('subjectID: ','s');
-        matfile = [ 'subj_eyemats/' subjectID '_drift.mat'];
+        matfile = [ 'subj_eyemats_' year '/' subjectID '_drift.mat'];
     end
     
     sub = load(matfile);
